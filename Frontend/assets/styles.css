@@ -1,0 +1,71 @@
+/* Hide default Streamlit artifacts */
+#MainMenu {visibility: hidden;}
+header {visibility: hidden;}
+footer {visibility: hidden;}
+
+/* Custom padding for top of the app */
+.block-container {
+    padding-top: 2rem !important;
+    padding-bottom: 5rem !important;
+    max-width: 48rem !important; /* ChatGPT style narrow width */
+}
+
+/* Style the chat input sticky bottom */
+[data-testid="stChatInput"] {
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background-color: #1E293B;
+}
+
+/* Toast styling */
+[data-testid="stToast"] {
+    background-color: #1E293B;
+    border-left: 4px solid #6366F1;
+}
+
+/* Style file uploader */
+[data-testid="stFileUploadDropzone"] {
+    background-color: #0f172a;
+    border: 2px dashed #334155;
+    border-radius: 12px;
+}
+[data-testid="stFileUploadDropzone"]:hover {
+    border-color: #6366F1;
+}
+
+/* Sources Attribution Layout */
+.sources-container {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px dashed #334155;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.sources-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94A3B8;
+    margin-right: 4px;
+}
+
+.source-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #38BDF8;
+    background-color: #0F172A;
+    border: 1px solid #1E293B;
+    border-radius: 6px;
+    padding: 2px 8px;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.source-badge:hover {
+    background-color: #1E293B;
+    border-color: #38BDF8;
+    transform: translateY(-1px);
+}

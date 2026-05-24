@@ -1,0 +1,18 @@
+# RAG Chatbot (FAISS + LangChain)
+
+An enterprise-ready Retrieval-Augmented Generation (RAG) chatbot application. Users can upload documents (PDF, DOCX, TXT), index them using FAISS vector storage, and query them with history-aware conversational context using LangChain and multiple dynamic LLM providers.
+
+- **FastAPI Backend**: Exposes endpoints for file uploads, vector store resets, query execution, and indexed file queries.
+- **Streamlit Frontend**: A responsive, premium dark-theme dashboard that renders chat interfaces, file uploads, sources citations, and settings.
+- **Orchestration**: Built with LangChain using local HuggingFace embeddings (`all-MiniLM-L6-v2`), `RecursiveCharacterTextSplitter`, and historical chains.
+- **Vector DB**: Local FAISS index persisted to disk.
+
+## Details
+
+- **Primary Stack**: Python, FastAPI, Streamlit, FAISS, LangChain, HuggingFace Transformers.
+- **LLM Integrations**: Groq (Llama 3), OpenAI (GPT-4o), Anthropic (Claude 3.5), Together AI, HuggingFace Hub, Ollama (Local LLMs).
+- **Key Files**:
+  - [Backend/main.py](file:///c:/Users/abuba/OneDrive/Documents/RAG/Backend/main.py): FastAPI server, routing uploads and query requests.
+  - [Backend/rag_service.py](file:///c:/Users/abuba/OneDrive/Documents/RAG/Backend/rag_service.py): Core RAG indexing and LLM retrieval-orchestration class.
+  - [Frontend/app.py](file:///c:/Users/abuba/OneDrive/Documents/RAG/Frontend/app.py): Streamlit entrypoint mounting chat forms and sidebar configurations.
+  - [llms-full.txt](file:///c:/Users/abuba/OneDrive/Documents/RAG/llms-full.txt): Deep technical API documentation and code details for LLMs.

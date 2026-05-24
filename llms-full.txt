@@ -1,0 +1,85 @@
+# RAG Chatbot - Technical Reference (llms-full.txt)
+
+This document provides a deep technical specification of the backend API routes and the RAG (Retrieval-Augmented Generation) pipeline architecture.
+
+---
+
+## FastAPI Backend Routing
+
+The backend server is defined in `Backend/main.py`. It runs on port `8000` by default.
+
+### Endpoints
+
+#### 1. GET `/health`
+- **Description**: Returns server status.
+- **Response**: `{"status": "ok"}`
+
+#### 2. GET `/documents`
+- **Description**: Returns all currently indexed files and their respective chunk counts.
+- **Response**: `{"documents": {"filename.pdf": chunk_count, ...}}`
+
+#### 3. POST `/upload`
+- **Description**: Uploads, chunks, embeds, and indexes a document.
+- **Request**: `file` (UploadFile, allowed extensions: `.pdf`, `.docx`, `.txt`)
+- **Workflow**:
+  - Saves file to local `uploads/` directory temporarily.
+  - Passes file to `RAGService.process_document()`.
+  - Deletes local temp file.
+- **Response**: `{"message": "Successfully processed...", "filename": "...", "chunks": int}`
+
+#### 4. POST `/chat`
+- **Description**: Evaluates user query against the vector store with session context.
+- **Request Payload**:
+  ```json
+  {
+    "question": "string",
+    "chat_history": [
+      {"role": "user", "content": "hello"},
+      {"role": "assistant", "content": "hi"}
+    ],
+    "config": {
+      "provider": "groq|openai|anthropic|together|huggingface|ollama",
+      "model": "string",
+      "temperature": 0.0
+    }
+  }
+  ```
+- **Response**: `{"answer": "string", "sources": ["filename.pdf", ...]}`
+
+#### 5. POST `/reset`
+- **Description**: Clears memory and deletes persisted FAISS index files on disk.
+- **Response**: `{"message": "Knowledge base reset successfully."}`
+
+---
+
+## RAG service Implementation (`Backend/rag_service.py`)
+
+The RAG pipeline is managed by the `RAGService` class.
+
+### 1. Vector Store Initialization
+- **Embeddings**: HuggingFace `all-MiniLM-L6-v2` loaded locally using PyTorch. Runs on CPU or GPU if available.
+- **Vector DB**: `FAISS`. Index stored locally in `Backend/faiss_index/`.
+- **Deserialization**: Safe deserialization enabled via `allow_dangerous_deserialization=True` since indexes are loaded locally.
+
+### 2. Document Chunking
+- **Text Splitter**: `RecursiveCharacterTextSplitter` from LangChain.
+- **Config**: `chunk_size=1000`, `chunk_overlap=200`.
+- **Loaders**:
+  - `.pdf` $\rightarrow$ `PyPDFLoader`
+  - `.docx` $\rightarrow$ `Docx2txtLoader`
+  - `.txt` $\rightarrow$ `TextLoader`
+
+### 3. Retrieval Chain Flow
+- **Retrieval Mode**: `as_retriever(search_kwargs={"k": 5})` (Retrieves top 5 chunks).
+- **History-Aware Routing**:
+  - A contextualizing chain takes user input and previous conversational history, rewriting the input into a standalone query.
+  - Prompt: `"Given a chat history and the latest user question... formulate a standalone question..."`
+- **Stuff Chain Integration**:
+  - System prompts instruct the model to answer based *only* on retrieved documents.
+  - Models are commanded to group retrieved chunks from the same file together and address distinct documents separately if multiple are present in context.
+  - Source path injection: Each document chunk is formatted as:
+    ```
+    Document Source Path: {source}
+    Content:
+    {page_content}
+    ```
