@@ -30,6 +30,17 @@ We have included a full setup and feature walkthrough video inside this reposito
 
 ---
 
+## 🖥️ User Interface Preview
+
+Here is a preview of the interactive Streamlit user interface where you can upload your knowledge base and query it in real-time:
+
+<p align="center">
+  <img src="assets/screenshot.png" alt="Nexus AI Chatbot Interface Preview" width="90%" />
+</p>
+
+---
+
+
 ## ⚡ Core Features
 
 -   **📁 Multi-Format Document Ingestion**: Upload and process `.pdf`, `.docx`, and `.txt` files on the fly.
