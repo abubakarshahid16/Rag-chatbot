@@ -163,6 +163,40 @@ Open your browser to http://localhost:8501 to use the dashboard!
 
 ---
 
+## 🌐 Deployment Guide
+
+This project can be deployed easily to the cloud using the following setups.
+
+### Option 1: Hugging Face Spaces (One-Click, Docker-based, Free)
+We have included a root-level [Dockerfile](Dockerfile) that runs both the FastAPI backend and the Streamlit frontend concurrently in the same container.
+1. Create a new Space on [Hugging Face](https://huggingface.co/spaces).
+2. Choose **Docker** as the SDK and select **Blank** template.
+3. Push this repository's code to your Hugging Face Space remote.
+4. Hugging Face will automatically build and run the Docker container. Your app will be live instantly!
+
+### Option 2: Separate UI & API (Streamlit Cloud + Render)
+1. **Backend**: Deploy the `Backend/` directory to [Render](https://render.com) or [Railway](https://railway.app) as a Python Web Service. Set the startup command to `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+2. **Frontend**: Deploy to [Streamlit Community Cloud](https://streamlit.io/cloud) by connecting your GitHub repo and selecting `Frontend/app.py` as the entrypoint.
+3. **Link them**: In your Streamlit Cloud Advanced Settings, add the environment variable `API_URL` and set it to your backend service's URL (e.g., `https://your-backend.onrender.com`).
+
+---
+
+## 📽️ Hosting the 185 MB Demo Video
+
+Since your walkthrough video `rag_chatbot.mp4` is larger than the 100 MB GitHub limit, follow this developer trick to embed it directly in your README:
+1. Go to your repository on GitHub.
+2. Click on **Releases** on the right side and click **Create a new release**.
+3. Create a draft release tag (e.g., `v1.0.0-assets`).
+4. Drag and drop `assets/rag_chatbot.mp4` into the release binaries box (GitHub supports files up to 2GB in releases).
+5. Once uploaded, publish the release, right-click on the download link for the video, and copy the link address.
+6. Replace the placeholder video link in [README.md](README.md) with your copied direct download URL:
+   ```html
+   <video src="https://github.com/abubakarshahid16/Rag-chatbot/releases/download/v1.0.0-assets/rag_chatbot.mp4" width="100%" controls></video>
+   ```
+
+---
+
+
 ## 📡 API Endpoints Reference
 
 The backend API exposes the following REST endpoints:

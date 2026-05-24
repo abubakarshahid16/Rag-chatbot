@@ -1,8 +1,8 @@
 import requests
 import streamlit as st
 
-# Point this to your existing FastAPI backend
-API_URL = "http://127.0.0.1:8000"
+import os
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 def upload_file_to_backend(file):
     """Sends a single file to the FastAPI backend."""
